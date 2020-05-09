@@ -1,5 +1,4 @@
 import javafx.animation.AnimationTimer;
-import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -45,7 +44,7 @@ public class Controller implements Initializable {
             public void handle(long now) {
                 // only update once every second
                 if ((now - lastUpdate) >= TimeUnit.MILLISECONDS.toNanos(500)) {
-                    gameOfLife.Step();
+                    gameOfLife.step();
                     drawField(gc, gameOfLife.getMatrix(), rows, cols);
                     incrGenCounter();
                     lastUpdate = now;
@@ -70,7 +69,7 @@ public class Controller implements Initializable {
         }));
 
         stepButton.setOnAction((actionEvent -> {
-            gameOfLife.Step();
+            gameOfLife.step();
             drawField(gc, gameOfLife.getMatrix(), rows, cols);
             incrGenCounter();
         }));
