@@ -43,7 +43,7 @@ public class Controller implements Initializable {
             @Override
             public void handle(long now) {
                 // only update once every second
-                if ((now - lastUpdate) >= TimeUnit.MILLISECONDS.toNanos(500)) {
+                if ((now - lastUpdate) >= TimeUnit.MILLISECONDS.toNanos(100)) {
                     gameOfLife.step();
                     drawField(gc, gameOfLife.getMatrix(), rows, cols);
                     incrGenCounter();
@@ -106,15 +106,16 @@ public class Controller implements Initializable {
             double y = mouseEvent.getY();
             int column = (int) (Math.ceil(x)/cellSize);
             int row = (int) (Math.ceil(y)/cellSize);
-            boolean[][] matrix = gameOfLife.getMatrix();
-            if(mouseEvent.getButton() == MouseButton.PRIMARY ) {
-                matrix[column][row] = true;
+            if(column < cols && row < rows) {
+                boolean[][] matrix = gameOfLife.getMatrix();
+                if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                    matrix[column][row] = true;
+                } else {
+                    matrix[column][row] = false;
+                }
+                gameOfLife.setMatrix(matrix);
+                drawField(gc, gameOfLife.getMatrix(), rows, cols);
             }
-            else{
-                matrix[column][row] = false;
-            }
-            gameOfLife.setMatrix(matrix);
-            drawField(gc, gameOfLife.getMatrix(), rows, cols);
         }
     }
 
@@ -129,7 +130,7 @@ public class Controller implements Initializable {
 
         for (int i = 0; i < field.length; i++) {
             for (int j = 0; j < field[i].length; j++) {
-                if (field[i][j] == true) {
+                if (field[i][j]) {
                     // first rect will end up becoming the border
                     gc.setFill(Color.gray(0.5, 0.5));
                     gc.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
